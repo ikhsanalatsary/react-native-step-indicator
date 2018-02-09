@@ -85,7 +85,10 @@ onPageChange(position){
 | ```direction``` | String  | Orientation(i.e. horizontal,vertical) | horizontal
 | ```customStyles``` | Object  | Custom styling | {}
 | ```labels``` | Array  | Labels for each step | null
-| `onPress` | Function (position: Number) | Function called when a step is pressed | null 
+| `onPress` | Function (position: Number) | Function called when a step is pressed | null
+| `icons` | Array<string> | Icons for each step | null
+| `customRenderStep` | Function (icon: string) | Callback Function to custom step. you must specified icons props | null
+| `customLabelViews` | React$Element / JSX.Element | Custom component to render label so yo don't need specify labels props | null
 
 ### Custom Styles
 
