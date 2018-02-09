@@ -57,13 +57,13 @@ export default class StepIndicator extends PureComponent {
   }
 
   render() {
-    const { labels, direction } = this.props;
+    const { labels, direction, customLabelViews } = this.props;
     return (
       <View style={[styles.container, direction === 'vertical' ? {flexDirection: 'row', flex:1} : {flexDirection: 'column'}]}>
         {this.state.width !== 0 && this.renderProgressBarBackground()}
         {this.state.width !== 0 && this.renderProgressBar()}
         {this.renderStepIndicator()}
-        {labels && this.renderStepLabels()}
+        {(labels || customLabelViews) && this.renderStepLabels()}
       </View>
     );
   }
@@ -162,8 +162,8 @@ export default class StepIndicator extends PureComponent {
     }
 
     renderStepLabels = () => {
-      const { labels, direction, currentPosition } = this.props;
-      var labelViews = labels.map((label,index) => {
+      const { labels, direction, currentPosition, customLabelViews } = this.props;
+      var labelViews = labels && labels.map((label,index) => {
         const selectedStepLabelStyle = index === currentPosition ? { color: this.customStyles.currentStepLabelColor } : { color: this.customStyles.labelColor }
         return (
           <TouchableWithoutFeedback style={styles.stepLabelItem} key={index} onPress={() => this.stepPressed(index)}>
@@ -178,13 +178,13 @@ export default class StepIndicator extends PureComponent {
 
       return(
         <View style={[styles.stepLabelsContainer, direction === 'vertical' ? {flexDirection: 'column', paddingHorizontal:4} : {flexDirection: 'row', paddingVertical:4}]}>
-          {labelViews}
+          {customLabelViews || labelViews}
         </View>
       )
     }
 
     renderStep = (position) => {
-      const { currentPosition, stepCount, direction } = this.props;
+      const { currentPosition, stepCount, direction, customRenderStep, icons } = this.props;
       let stepStyle;
       let indicatorLabelStyle;
       const separatorStyle = (direction === 'vertical') ? { width: this.customStyles.separatorStrokeWidth, zIndex:10 } : { height: this.customStyles.separatorStrokeWidth }
@@ -232,7 +232,10 @@ export default class StepIndicator extends PureComponent {
 
       return (
         <Animated.View key={'step-indicator'} removeClippedSubviews style={[styles.step , stepStyle ]}>
-          <Text style={indicatorLabelStyle}>{ position + 1 }</Text>
+          {customRenderStep && icons ?
+            customRenderStep(icons[position])
+            : <Text style={indicatorLabelStyle}>{ position + 1 }</Text>
+          }
         </Animated.View>
       );
     }
@@ -321,7 +324,10 @@ export default class StepIndicator extends PureComponent {
     customStyles: PropTypes.object,
     direction: PropTypes.oneOf(['vertical', 'horizontal']),
     labels: PropTypes.array,
-    onPress: PropTypes.func
+    onPress: PropTypes.func,
+    customRenderStep: PropTypes.func,
+    customLabelViews: PropTypes.node,
+    icons: PropTypes.arrayOf(PropTypes.string)
   };
 
   StepIndicator.defaultProps = {
