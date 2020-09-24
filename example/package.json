@@ -9,7 +9,7 @@
     "mobile": "npm run react-native"
   },
   "dependencies": {
-    "react": "16.0.0-alpha.12",
+    "react": "16.5.0",
     "react-native": "0.48.4",
     "react-native-paged-scroll-view": "^2.0.4",
     "react-native-step-indicator": "file:../",
